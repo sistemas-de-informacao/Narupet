@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AboutFragment" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:text="Narupet App"
+        android:textAlignment="center"
+        android:textColor="#ff7a42"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:text="Versão 1.0.0"
+        android:textAlignment="center"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="296dp"
+        android:src="@drawable/narupet" />
+
+    <Button
+        android:id="@+id/btnGoToSenac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#004c94"
+        android:text="Ir para o Senac"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        android:layout_marginTop="30dp"
+        android:background="#FF7A42"
+        android:gravity="center"
+        android:text="Daniel Vieira \n Edson Camargo"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/btnSendEmailToDevelopers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#FF7A42"
+        android:text="ENVIAR E-MAIL PARA DESENVOLVEDORES"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

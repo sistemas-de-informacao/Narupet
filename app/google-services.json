@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "919724093975",
+    "firebase_url": "https://narupet-app.firebaseio.com",
+    "project_id": "narupet-app",
+    "storage_bucket": "narupet-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919724093975:android:09a0f79f1789d409aee252",
+        "android_client_info": {
+          "package_name": "dev.edsoncamargo.navigationview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919724093975-abfm8hkov00ekghevjn7n0ccolr0vuj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBXrkjWU-sm3yylSZz-VhHkfH1iQHGqyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919724093975-abfm8hkov00ekghevjn7n0ccolr0vuj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
