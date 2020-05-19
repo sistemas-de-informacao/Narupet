@@ -15,6 +15,8 @@ class SendEmailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_email)
         handleButtonSendEmail()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle("ENVIAR E-MAIL")
     }
 
     private fun handleButtonSendEmail() {
@@ -26,7 +28,10 @@ class SendEmailActivity : AppCompatActivity() {
             val i = Intent(Intent.ACTION_SEND)
             i.data = Uri.parse("mailto:")
             i.type = "message/rfc822"
-            i.putExtra(Intent.EXTRA_EMAIL, arrayOf("dinhocmenezes@hotmail.com", "DaniielVieira@outlook.com"))
+            i.putExtra(
+                Intent.EXTRA_EMAIL,
+                arrayOf("dinhocmenezes@hotmail.com", "DaniielVieira@outlook.com")
+            )
             i.putExtra(Intent.EXTRA_SUBJECT, etSubjectEmail.text.trim())
             i.putExtra(Intent.EXTRA_TEXT, etMessage.text.trim())
             try {

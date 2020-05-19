@@ -9,18 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="dev.edsoncamargo.views.LoginActivity">
+        <activity android:name=".views.SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="dev.edsoncamargo.views.SendEmailActivity" />
         <activity
-            android:name="dev.edsoncamargo.navigation.SettingsActivity"
-            android:parentActivityName="dev.edsoncamargo.navigation.MainActivity" />
-        <activity android:name="dev.edsoncamargo.navigation.MainActivity" />
+            android:name=".navigation.AboutActivity"
+            android:parentActivityName=".navigation.MainActivity" />
+        <activity
+            android:name=".views.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".views.SendEmailActivity"
+            android:parentActivityName=".navigation.AboutActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".navigation.MainActivity" />
     </application>
 
 </manifest>

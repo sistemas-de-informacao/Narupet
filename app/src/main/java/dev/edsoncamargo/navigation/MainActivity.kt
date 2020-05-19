@@ -1,11 +1,16 @@
 package dev.edsoncamargo.navigation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import dev.edsoncamargo.R
+import dev.edsoncamargo.views.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu.*
 
@@ -17,13 +22,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         createToggleNavigationViewItems()
         handleNavigationViewItems()
-        getCurrentUser()
+         getCurrentUser()
     }
 
     private fun getCurrentUser() {
-        val email = intent.getStringExtra("value")
-        if (email != null) {
-            tvUserLoggedMenu.text = intent.getStringExtra("value")
+        val auth = FirebaseAuth.getInstance()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            val header = navigationView.getHeaderView(0)
+            val tvUserLoggedMenu = header.findViewById<TextView>(R.id.tvUserLoggedMenu)
+            tvUserLoggedMenu.text = auth.currentUser!!.displayName
+        } else {
+            auth.signOut()
+            val i = Intent(this, LoginActivity::class.java)
+            startActivity(i)
         }
     }
 
@@ -42,10 +53,8 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawers()
             when (it.itemId) {
                 R.id.about -> {
-                    val fragmentViewOne = AboutFragment();
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, fragmentViewOne)
-                        .commit()
+                    val i = Intent(this, AboutActivity::class.java)
+                    startActivity(i)
                 }
 
                 R.id.logout -> {

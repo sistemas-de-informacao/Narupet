@@ -12,7 +12,6 @@
         android:layout_weight="1"
         android:background="#ff7a42"
         android:padding="16dp"
-        android:text="NARUPET"
         android:textAlignment="viewStart"
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
