@@ -4,12 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-import dev.edsoncamargo.navigationview.MainActivity
-import dev.edsoncamargo.navigationview.R
+import dev.edsoncamargo.R
 import kotlinx.android.synthetic.main.activity_send_email.*
-import kotlinx.android.synthetic.main.activity_send_email.view.*
 import java.lang.Exception
 
 class SendEmailActivity : AppCompatActivity() {

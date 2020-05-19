@@ -1,4 +1,4 @@
-package dev.edsoncamargo.navigationview
+package dev.edsoncamargo.navigation
 
 import org.junit.Test
 

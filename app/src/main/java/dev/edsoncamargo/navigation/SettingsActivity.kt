@@ -1,7 +1,8 @@
-package dev.edsoncamargo.navigationview
+package dev.edsoncamargo.navigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import dev.edsoncamargo.R
 
 class SettingsActivity : AppCompatActivity() {
 

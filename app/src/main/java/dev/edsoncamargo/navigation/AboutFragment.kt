@@ -1,4 +1,4 @@
-package dev.edsoncamargo.navigationview
+package dev.edsoncamargo.navigation
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dev.edsoncamargo.R
 import dev.edsoncamargo.views.SendEmailActivity
 import kotlinx.android.synthetic.main.fragment_about.view.*
 

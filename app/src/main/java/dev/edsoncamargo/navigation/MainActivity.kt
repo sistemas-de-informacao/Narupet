@@ -1,20 +1,33 @@
-package dev.edsoncamargo.navigationview
+package dev.edsoncamargo.navigation
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import com.google.firebase.auth.FirebaseAuth
+import dev.edsoncamargo.R
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.menu.*
 
 class MainActivity : AppCompatActivity() {
-
-    var toggle: ActionBarDrawerToggle? = null;
+    private var toggle: ActionBarDrawerToggle? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        createToggleNavigationViewItems()
+        handleNavigationViewItems()
+        getCurrentUser()
+    }
 
+    private fun getCurrentUser() {
+        val email = intent.getStringExtra("value")
+        if (email != null) {
+            tvUserLoggedMenu.text = intent.getStringExtra("value")
+        }
+    }
+
+    private fun createToggleNavigationViewItems() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toggle = ActionBarDrawerToggle(
             this, drawerLayout,
@@ -22,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(toggle!!)
         toggle!!.syncState()
+    }
+
+    private fun handleNavigationViewItems() {
         navigationView.setNavigationItemSelectedListener {
             drawerLayout.closeDrawers()
             when (it.itemId) {
@@ -33,7 +49,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.logout -> {
-                    this.finishAffinity();
+                    val auth = FirebaseAuth.getInstance()
+                    auth.signOut()
+                    finishAffinity()
                 }
             }
             return@setNavigationItemSelectedListener false

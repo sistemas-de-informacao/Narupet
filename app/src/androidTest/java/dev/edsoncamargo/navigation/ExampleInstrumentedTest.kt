@@ -1,4 +1,4 @@
-package dev.edsoncamargo.navigationview
+package dev.edsoncamargo.navigation
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("dev.edsoncamargo.navigationview", appContext.packageName)
+        assertEquals("dev.edsoncamargo.navigation", appContext.packageName)
     }
 }
