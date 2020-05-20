@@ -3,10 +3,16 @@
 
     <group android:checkableBehavior="none">
         <item
+            android:id="@+id/produtos"
+            android:icon="@drawable/home"
+            android:title="Produtos" />
+        <item
             android:id="@+id/about"
+            android:icon="@drawable/users"
             android:title="Sobre" />
         <item
             android:id="@+id/logout"
+            android:icon="@drawable/sign"
             android:title="Sair" />
     </group>
 </menu>

@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import dev.edsoncamargo.R
 import dev.edsoncamargo.views.LoginActivity
+import dev.edsoncamargo.views.ProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu.*
 
@@ -20,22 +21,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initProductsFragment()
         createToggleNavigationViewItems()
         handleNavigationViewItems()
-         getCurrentUser()
+        getCurrentUser()
     }
 
-    private fun getCurrentUser() {
-        val auth = FirebaseAuth.getInstance()
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            val header = navigationView.getHeaderView(0)
-            val tvUserLoggedMenu = header.findViewById<TextView>(R.id.tvUserLoggedMenu)
-            tvUserLoggedMenu.text = auth.currentUser!!.displayName
-        } else {
-            auth.signOut()
-            val i = Intent(this, LoginActivity::class.java)
-            startActivity(i)
-        }
+    private fun initProductsFragment() {
+        val productsFragment = ProductsFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.productsContainer, productsFragment)
+            .commit()
     }
 
     private fun createToggleNavigationViewItems() {
@@ -52,6 +48,11 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener {
             drawerLayout.closeDrawers()
             when (it.itemId) {
+                R.id.productsContainer -> {
+                    val i = Intent(this, MainActivity::class.java)
+                    startActivity(i)
+                }
+
                 R.id.about -> {
                     val i = Intent(this, AboutActivity::class.java)
                     startActivity(i)
@@ -72,6 +73,19 @@ class MainActivity : AppCompatActivity() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun getCurrentUser() {
+        val auth = FirebaseAuth.getInstance()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            val header = navigationView.getHeaderView(0)
+            val tvUserLoggedMenu = header.findViewById<TextView>(R.id.tvUserLoggedMenu)
+            tvUserLoggedMenu.text = auth.currentUser!!.displayName
+        } else {
+            auth.signOut()
+            val i = Intent(this, LoginActivity::class.java)
+            startActivity(i)
         }
     }
 }

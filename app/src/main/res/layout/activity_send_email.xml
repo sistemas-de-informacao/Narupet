@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="25sp"
     tools:context="dev.edsoncamargo.views.SendEmailActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
         android:text="ENVIAR E-MAIL PARA DESENVOLVEDORES"
-        android:textAlignment="center"
+        android:textAlignment="viewStart"
         android:textColor="#000000"
         android:textStyle="bold" />
 
@@ -21,8 +21,6 @@
         android:id="@+id/etSubjectEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="Assunto"
@@ -32,8 +30,6 @@
         android:id="@+id/etMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
         android:layout_marginBottom="25dp"
         android:ems="10"
         android:hint="Mensagem"
@@ -43,8 +39,6 @@
         android:id="@+id/btnSendEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
         android:background="#FF7A42"
         android:text="ENVIAR"
         android:textColor="#FFFFFF" />

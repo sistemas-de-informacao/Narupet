@@ -27,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
         background.start()
     }
 
-    fun getCurrentUser(): FirebaseUser? {
+    private fun getCurrentUser(): FirebaseUser? {
         val auth = FirebaseAuth.getInstance()
         return auth.currentUser
     }
