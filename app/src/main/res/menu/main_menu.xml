@@ -4,14 +4,17 @@
 
     <group android:checkableBehavior="none">
         <item
-            android:id="@+id/cart"
-            android:icon="@drawable/cart"
-            android:title="Carrinho"
-            app:showAsAction="always" />
-        <item
             android:id="@+id/produtos"
             android:icon="@drawable/home"
             android:title="Produtos" />
+        <item
+            android:id="@+id/cart"
+            android:icon="@drawable/cart"
+            android:title="Carrinho" />
+        <item
+            android:id="@+id/ordered"
+            android:icon="@drawable/bone"
+            android:title="Meus pedidos" />
         <item
             android:id="@+id/about"
             android:icon="@drawable/users"

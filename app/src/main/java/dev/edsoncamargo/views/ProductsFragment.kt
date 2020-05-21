@@ -60,8 +60,8 @@ class ProductsFragment : Fragment() {
     }
 
     private fun updateUi(products: Set<Product>) {
-        fragmentProductsContainer.removeAllViews()
         val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+        fragmentProductsContainer.removeAllViews()
         for (product in products) {
             val cardView =
                 layoutInflater.inflate(R.layout.card_item, fragmentProductsContainer, false)

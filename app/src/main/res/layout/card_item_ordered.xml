@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="25sp">
+
+        <TextView
+            android:id="@+id/tvHashOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PEDIDO"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTotalOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TOTAL R$ 00,00" />
+
+        <TextView
+            android:id="@+id/tvDateOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="00/00/0000"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

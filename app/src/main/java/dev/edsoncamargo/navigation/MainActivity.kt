@@ -13,6 +13,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import dev.edsoncamargo.R
 import dev.edsoncamargo.views.CartFragment
 import dev.edsoncamargo.views.LoginActivity
+import dev.edsoncamargo.views.OrderedFragment
 import dev.edsoncamargo.views.ProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu.*
@@ -35,8 +36,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initProductsFragment() {
         if (intent.getStringExtra("intent") == "cart") {
-        Log.e("INFO", intent.getStringExtra("intent"))
             val productsFragment = CartFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.productsContainer, productsFragment)
+                .commit()
+        } else if (intent.getStringExtra("intent") == "ordered") {
+            val productsFragment = OrderedFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.productsContainer, productsFragment)
                 .commit()
@@ -70,6 +75,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.cart -> {
                     val i = Intent(this, MainActivity::class.java)
                     i.putExtra("intent", "cart")
+                    startActivity(i)
+                }
+
+                R.id.ordered -> {
+                    val i = Intent(this, MainActivity::class.java)
+                    i.putExtra("intent", "ordered")
                     startActivity(i)
                 }
 

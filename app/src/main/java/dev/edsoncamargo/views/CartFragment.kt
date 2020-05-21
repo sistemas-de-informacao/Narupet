@@ -97,10 +97,10 @@ class CartFragment : Fragment() {
             btnFinishShop.setText("FINALIZAR POR ${formatter.format(total)}")
             btnFinishShop.setOnClickListener {
                 val database =
-                    FirebaseDatabase.getInstance().reference.child(FirebaseAuth.getInstance().currentUser!!.uid)
+                    FirebaseDatabase.getInstance().reference.child("ordered").child(FirebaseAuth.getInstance().currentUser!!.uid)
                 val ordered = Ordered(date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), total = total, products = Cart.on)
                 layoutInflater.inflate(R.layout.bag, shopContainer, true)
-                val new = database.child("ordered").push()
+                val new = database.push()
                 ordered.id = new.key
                 new.setValue(ordered)
                 cartContainer.removeAllViews()

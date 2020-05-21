@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="25sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvProductNameOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NOME DO PRODUTO"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvQtdProductOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quantidade 0" />
+
+        <TextView
+            android:id="@+id/tvUnitPriceOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unidade R$ 00,00"
+            android:textAlignment="viewEnd" />
+
+        <TextView
+            android:id="@+id/tvTotalPriceProductOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total R$ 00,00"
+            android:textAlignment="viewEnd" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

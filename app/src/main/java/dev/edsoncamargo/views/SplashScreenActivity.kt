@@ -20,6 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
                     Thread.sleep(1200)
                     isUserLogged()
                 } catch (e: Exception) {
+                    toLogin()
                     e.printStackTrace()
                 }
             }
@@ -40,5 +41,11 @@ class SplashScreenActivity : AppCompatActivity() {
             val i = Intent(this, LoginActivity::class.java)
             startActivity(i)
         }
+    }
+
+    fun toLogin() {
+        FirebaseAuth.getInstance().signOut()
+        val i = Intent(this, LoginActivity::class.java)
+        startActivity(i)
     }
 }

@@ -50,5 +50,11 @@
             android:text="Total R$ 00,00"
             android:textAlignment="viewEnd" />
 
+        <LinearLayout
+            android:id="@+id/containerProductsOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
