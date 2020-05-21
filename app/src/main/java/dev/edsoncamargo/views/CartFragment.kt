@@ -1,5 +1,6 @@
 package dev.edsoncamargo.views
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,16 +9,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import androidx.annotation.RequiresApi
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Cart
+import dev.edsoncamargo.models.Ordered
 import dev.edsoncamargo.utils.alert
 import kotlinx.android.synthetic.main.card_item_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 import java.text.NumberFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.zip.Inflater
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +38,7 @@ class CartFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_cart, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         getMyProductsToBuy()
@@ -57,6 +64,7 @@ class CartFragment : Fragment() {
 
                     }
 
+                    @RequiresApi(Build.VERSION_CODES.O)
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         if (cardView.etQtdProductCart.text.isNullOrBlank().not()) {
                             product.qtd = cardView.etQtdProductCart.text.toString().toInt()
@@ -74,11 +82,11 @@ class CartFragment : Fragment() {
                 cartContainer.addView(cardView)
             }
         } else {
-            shopContainer.removeAllViews()
-            layoutInflater.inflate(R.layout.bag, shopContainer, true)
+            callContainerBag()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleButtonFinishShop() {
         val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
         if (Cart.on.isEmpty().not()) {
@@ -87,6 +95,18 @@ class CartFragment : Fragment() {
                 total = total.plus(product.totalPrice!!)
             }
             btnFinishShop.setText("FINALIZAR POR ${formatter.format(total)}")
+            btnFinishShop.setOnClickListener {
+                val database =
+                    FirebaseDatabase.getInstance().reference.child(FirebaseAuth.getInstance().currentUser!!.uid)
+                val ordered = Ordered(date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), total = total, products = Cart.on)
+                layoutInflater.inflate(R.layout.bag, shopContainer, true)
+                val new = database.child("ordered").push()
+                ordered.id = new.key
+                new.setValue(ordered)
+                cartContainer.removeAllViews()
+                callContainerBag()
+                alert("Compra efetuada", "Obrigado por comprar conosco.", shopContainer.context)
+            }
         }
     }
 
@@ -100,5 +120,10 @@ class CartFragment : Fragment() {
                 alert("Compra cancelada", "Sua sacola foi esvaziado.", shopContainer.context)
             }
         }
+    }
+
+    private fun callContainerBag() {
+        shopContainer.removeAllViews()
+        layoutInflater.inflate(R.layout.bag, shopContainer, true)
     }
 }
