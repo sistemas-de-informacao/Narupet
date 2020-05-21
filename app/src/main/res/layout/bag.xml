@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12sp"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="266dp"
+        android:layout_marginBottom="10sp"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/sacola" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sua sacola está vazia... \nVá para a página produtos e procure por itens que vão deixar seu pet feliz.\nQuando encontrá-los, clique em adicionar na sacola.\nDattebayo!"
+        android:textAlignment="center" />
+</LinearLayout>

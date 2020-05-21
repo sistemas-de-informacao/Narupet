@@ -24,9 +24,9 @@ class LoginActivity : AppCompatActivity() {
     private fun signInWithEmailAndPassword() {
         val auth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(
-                etEmailLogin.text.trim().toString(),
-                etPasswordLogin.text.trim().toString()
-            )
+            etEmailLogin.text.trim().toString(),
+            etPasswordLogin.text.trim().toString()
+        )
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
@@ -45,9 +45,9 @@ class LoginActivity : AppCompatActivity() {
     private fun createUserWithEmailAndPassword() {
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(
-                etEmailLogin.text.trim().toString(),
-                etPasswordLogin.text.trim().toString()
-            )
+            etEmailLogin.text.trim().toString(),
+            etPasswordLogin.text.trim().toString()
+        )
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
                         .addOnCompleteListener {
                             if (task.isSuccessful) {
                                 val i = Intent(this, MainActivity::class.java)
+
                                 startActivity(i)
                             }
                         }

@@ -4,12 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import dev.edsoncamargo.R
+import dev.edsoncamargo.views.CartFragment
 import dev.edsoncamargo.views.LoginActivity
 import dev.edsoncamargo.views.ProductsFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,17 +23,29 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initProductsFragment()
         createToggleNavigationViewItems()
         handleNavigationViewItems()
         getCurrentUser()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initProductsFragment()
+    }
+
     private fun initProductsFragment() {
-        val productsFragment = ProductsFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.productsContainer, productsFragment)
-            .commit()
+        if (intent.getStringExtra("intent") == "cart") {
+        Log.e("INFO", intent.getStringExtra("intent"))
+            val productsFragment = CartFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.productsContainer, productsFragment)
+                .commit()
+        } else {
+            val productsFragment = ProductsFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.productsContainer, productsFragment)
+                .commit()
+        }
     }
 
     private fun createToggleNavigationViewItems() {
@@ -48,13 +62,14 @@ class MainActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener {
             drawerLayout.closeDrawers()
             when (it.itemId) {
-                R.id.productsContainer -> {
+                R.id.produtos -> {
                     val i = Intent(this, MainActivity::class.java)
                     startActivity(i)
                 }
 
                 R.id.cart -> {
-                    val i = Intent(this, CartActivity::class.java)
+                    val i = Intent(this, MainActivity::class.java)
+                    i.putExtra("intent", "cart")
                     startActivity(i)
                 }
 
