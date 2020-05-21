@@ -57,7 +57,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             override fun onFailure(call: Call<Product>, t: Throwable) {
                 Snackbar
                     .make(
-                        fragmentProductsContainer,
+                        containerProductDetails,
                         "Não foi possível conectar-se a internet.",
                         Snackbar.LENGTH_LONG
                     )

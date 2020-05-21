@@ -10,10 +10,54 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/fragmentProductsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/etSearchProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12sp"
+                    android:layout_marginTop="25sp"
+                    android:layout_marginRight="12sp"
+                    android:layout_marginBottom="10sp"
+                    android:ems="10"
+                    android:hint="Busque por nome..."
+                    android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/spSearchCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12sp"
+                    android:layout_marginRight="12sp"
+                    android:layout_marginBottom="12sp" />
+
+                <Button
+                    android:id="@+id/btnSearchFilter"
+                    android:layout_width="127dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12sp"
+                    android:layout_marginRight="12sp"
+                    android:layout_marginBottom="12sp"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="FILTRAR" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragmentProductsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+
+        </LinearLayout>
     </ScrollView>
 
 </FrameLayout>

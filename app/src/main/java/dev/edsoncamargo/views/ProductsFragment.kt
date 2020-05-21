@@ -8,11 +8,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import com.google.android.material.snackbar.Snackbar
 
 import dev.edsoncamargo.R
+import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Product
+import dev.edsoncamargo.models.ProductCart
 import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item.view.*
@@ -28,6 +34,7 @@ import java.util.*
 class ProductsFragment : Fragment() {
 
     var loading: AlertDialog? = null
+    var category: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +47,19 @@ class ProductsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loading = progress(activity!!, layoutInflater)
-        getAllProducts()
+        getProducts()
+        handleButtonSearchFilter()
+        onCreateSpinnerCategoriesValues()
     }
 
-    private fun updateUi(products: List<Product>) {
+    private fun handleButtonSearchFilter() {
+        btnSearchFilter.setOnClickListener {
+            loading = progress(activity!!, layoutInflater)
+            getProducts()
+        }
+    }
+
+    private fun updateUi(products: Set<Product>) {
         fragmentProductsContainer.removeAllViews()
         val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
         for (product in products) {
@@ -52,13 +68,63 @@ class ProductsFragment : Fragment() {
             cardView.tvProductNameList.text = product.nomeProduto
             cardView.tvProductPriceList.text = formatter.format(product.precProduto)
             cardView.btnAddToCard.setOnClickListener {
-                Snackbar
-                    .make(
-                        fragmentProductsContainer,
-                        "${product.nomeProduto} adicionado ao carrinho.",
-                        Snackbar.LENGTH_LONG
+                if (Cart.on.isEmpty().not()) {
+                    for ((i, p) in Cart.on.withIndex()) {
+                        if (p.id == product.idProduto) {
+                            p.qtd = p.qtd!!.plus(1)
+                            p.totalPrice =
+                                p.totalPrice!!.plus(p.totalPrice!! - p.specialPrice!!)
+                            Snackbar
+                                .make(
+                                    fragmentProductsContainer,
+                                    "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                .show()
+                            return@setOnClickListener
+                        } else if (i >= Cart.on.size - 1) {
+                            val productAdded = ProductCart(
+                                product.nomeProduto,
+                                product.idProduto,
+                                null,
+                                product.precProduto,
+                                null,
+                                product.descontoPromocao
+                            )
+                            productAdded.qtd = 1
+                            productAdded.totalPrice = product.precProduto - product.descontoPromocao
+                            Cart.on.add(productAdded)
+                            Snackbar
+                                .make(
+                                    fragmentProductsContainer,
+                                    "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                .show()
+                            return@setOnClickListener
+                        }
+                    }
+                } else {
+                    val productAdded = ProductCart(
+                        product.nomeProduto,
+                        product.idProduto,
+                        null,
+                        product.precProduto,
+                        null,
+                        product.descontoPromocao
                     )
-                    .show()
+                    productAdded.qtd = 1
+                    productAdded.totalPrice = product.precProduto - product.descontoPromocao
+                    Cart.on.add(productAdded)
+                    Snackbar
+                        .make(
+                            fragmentProductsContainer,
+                            "${product.nomeProduto} adicionado ao carrinho.",
+                            Snackbar.LENGTH_LONG
+                        )
+                        .show()
+                    return@setOnClickListener
+                }
             }
             cardView.btnSeeProduct.setOnClickListener {
                 val i = Intent(activity, ProductDetailsActivity::class.java)
@@ -69,15 +135,10 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun getAllProducts() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://oficinacordova.azurewebsites.net")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val productRepository = retrofit.create(ProductRepository::class.java)
-        val request = productRepository.list()
-        val callback = object : Callback<List<Product>> {
-            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+    private fun getProducts() {
+        val request = changeRequestType()
+        val callback = object : Callback<Set<Product>> {
+            override fun onResponse(call: Call<Set<Product>>, response: Response<Set<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body()
                     if (products != null) {
@@ -103,7 +164,7 @@ class ProductsFragment : Fragment() {
                 loading!!.dismiss()
             }
 
-            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+            override fun onFailure(call: Call<Set<Product>>, t: Throwable) {
                 Snackbar
                     .make(
                         fragmentProductsContainer,
@@ -115,7 +176,88 @@ class ProductsFragment : Fragment() {
                 loading!!.dismiss()
             }
         }
-        request.enqueue(callback)
+        request!!.enqueue(callback)
+    }
+
+    private fun changeRequestType(): Call<Set<Product>>? {
+        if (etSearchProductName.text.isNullOrBlank()
+                .not() && category == -1
+        ) {
+            return createGenericRetrofit().listByName(etSearchProductName.text.toString().trim())
+        } else if (etSearchProductName.text.isNullOrBlank() && category != -1) {
+            return createGenericRetrofit().listByCategory(category)
+        } else if (etSearchProductName.text.isNullOrBlank()
+                .not() && category != -1
+        ) {
+            return createGenericRetrofit().listByNameAndCategory(
+                etSearchProductName.text.toString().trim(), category
+            )
+        }
+        return createGenericRetrofit().list()
+    }
+
+    private fun createGenericRetrofit(): ProductRepository {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://oficinacordova.azurewebsites.net")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(ProductRepository::class.java)
+    }
+
+    private fun onCreateSpinnerCategoriesValues() {
+        val spinner = activity!!.findViewById<Spinner>(R.id.spSearchCategories)
+        val items = arrayOf(
+            "Seleciona uma categoria",
+            "Alimentação",
+            "Espécies",
+            "Farmácia",
+            "Adestramento",
+            "Higiene e Beleza",
+            "Acessórios",
+            "Pesticidas",
+            "Outro Tésteé"
+        )
+        val adapter = ArrayAdapter(activity!!, android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                when (spinner.selectedItemPosition) {
+                    0 -> {
+                        category = -1
+                    }
+                    1 -> {
+                        category = 1
+                    }
+                    2 -> {
+                        category = 2
+                    }
+                    3 -> {
+                        category = 3
+                    }
+                    4 -> {
+                        category = 4
+                    }
+                    5 -> {
+                        category = 5
+                    }
+                    6 -> {
+                        category = 6
+                    }
+                    7 -> {
+                        category = 7
+                    }
+                    8 -> {
+                        category = 20
+                    }
+                }
+            }
+        }
     }
 
 }

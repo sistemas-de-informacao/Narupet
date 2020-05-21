@@ -8,5 +8,5 @@ data class Product(
     val qtdMinEstoque: Int,
     val ativoProduto: Boolean,
     val idProduto: Int,
-    val descontoPromocao: Int
+    val descontoPromocao: Double
 )

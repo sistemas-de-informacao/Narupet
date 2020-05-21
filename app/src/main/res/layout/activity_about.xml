@@ -46,7 +46,7 @@
         android:layout_marginTop="30dp"
         android:background="#FF7A42"
         android:gravity="center"
-        android:text="Daniel Vieira \n Edson Camargo"
+        android:text="Daniel Vieira \n Edson Camargo \n Lucas P. \n Mateus F."
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:visibility="visible" />

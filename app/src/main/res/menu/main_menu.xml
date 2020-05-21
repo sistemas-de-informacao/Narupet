@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/cart"
+            android:icon="@drawable/cart"
+            android:title="Carrinho"
+            app:showAsAction="always" />
         <item
             android:id="@+id/produtos"
             android:icon="@drawable/home"

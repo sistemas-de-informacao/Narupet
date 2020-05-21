@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
                     startActivity(i)
                 }
 
+                R.id.cart -> {
+                    val i = Intent(this, CartActivity::class.java)
+                    startActivity(i)
+                }
+
                 R.id.about -> {
                     val i = Intent(this, AboutActivity::class.java)
                     startActivity(i)

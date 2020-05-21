@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="25sp"
+    android:paddingLeft="12sp"
+    android:paddingTop="25sp"
+    android:paddingRight="12sp"
+    android:paddingBottom="12sp"
     tools:context="dev.edsoncamargo.views.SendEmailActivity">
 
     <TextView
