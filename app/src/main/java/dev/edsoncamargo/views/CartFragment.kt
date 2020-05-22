@@ -105,6 +105,7 @@ class CartFragment : Fragment() {
                 new.setValue(ordered)
                 cartContainer.removeAllViews()
                 callContainerBag()
+                Cart.on.clear()
                 alert("Compra efetuada", "Obrigado por comprar conosco.", shopContainer.context)
             }
         }
