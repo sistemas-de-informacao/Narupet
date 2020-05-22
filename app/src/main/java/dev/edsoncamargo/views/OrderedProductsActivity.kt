@@ -23,7 +23,6 @@ class OrderedProductsActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        //This method is called when the up button is pressed. Just the pop back stack.
         supportFragmentManager.popBackStack()
         val i = Intent(this, MainActivity::class.java)
         i.putExtra("intent", "ordered")
@@ -37,11 +36,16 @@ class OrderedProductsActivity : AppCompatActivity() {
         val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
         for (product in ProductCartOrdered.on) {
             val cardView =
-                layoutInflater.inflate(R.layout.card_item_product_ordered, containerProductsOrdered, false)
+                layoutInflater.inflate(
+                    R.layout.card_item_product_ordered,
+                    containerProductsOrdered,
+                    false
+                )
             cardView.tvProductNameOrdered.text = product.name
             cardView.tvQtdProductOrdered.text = "Quantidade ${product.qtd.toString()}"
             cardView.tvUnitPriceOrdered.text = "Unidade ${formatter.format(product.unitPrice)}"
-            cardView.tvTotalPriceProductOrdered.text = "Total ${formatter.format(product.totalPrice)}"
+            cardView.tvTotalPriceProductOrdered.text =
+                "Total ${formatter.format(product.totalPrice)}"
             containerProductsOrdered.addView(cardView)
         }
     }

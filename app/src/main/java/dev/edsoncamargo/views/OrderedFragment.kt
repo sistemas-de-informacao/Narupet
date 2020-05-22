@@ -12,10 +12,7 @@ import com.google.firebase.database.*
 import com.google.gson.Gson
 
 import dev.edsoncamargo.R
-import dev.edsoncamargo.models.Ordered
-import dev.edsoncamargo.models.Product
-import dev.edsoncamargo.models.ProductCart
-import dev.edsoncamargo.models.ProductCartOrdered
+import dev.edsoncamargo.models.*
 import kotlinx.android.synthetic.main.card_item.*
 import kotlinx.android.synthetic.main.card_item_cart.*
 import kotlinx.android.synthetic.main.card_item_cart.view.*
@@ -52,42 +49,29 @@ class OrderedFragment : Fragment() {
         val ref = FirebaseDatabase.getInstance().reference.child("ordered")
             .child(FirebaseAuth.getInstance().currentUser!!.uid)
         val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-        ref.addChildEventListener(object : ChildEventListener {
+        val listener = object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot, p1: String?) {
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
 
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
-
             }
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
-                val ordered = dataSnapshot.value as HashMap<String, *>
+                val cart = dataSnapshot.getValue(OrderedEntity::class.java)
                 val cardView =
                     layoutInflater.inflate(R.layout.card_item_ordered, containerOrdered, false)
-                cardView.tvHashOrdered.text = "PEDIDO ${ordered["id"]}"
-                cardView.tvDateOrdered.text = ordered.get("date").toString()
-                cardView.tvTotalOrdered.text = "TOTAL ${formatter.format(ordered["total"])}"
-                containerOrdered.setOnClickListener {
-                    for (p in ordered["products"] as List<*>) {
-                        val product = p as HashMap<*, *>
-                        ProductCartOrdered.on.add(
-                            ProductCart(
-                                product["name"].toString(),
-                                product["id"].toString().toInt(),
-                                product["qtd"].toString().toInt(),
-                                product["unitPrice"].toString().toDouble(),
-                                product["totalPrice"].toString().toDouble(),
-                                product["specialPrice"].toString().toDouble()
-                            )
-                        )
-                    }
+                cardView.tvHashOrdered.text = "PEDIDO ${cart!!.id}"
+                cardView.tvDateOrdered.text = cart.date.toString()
+                cardView.tvTotalOrdered.text = "TOTAL ${formatter.format(cart.total)}"
+                cardView.setOnClickListener {
                     val intent = Intent(activity, OrderedProductsActivity::class.java)
-                    intent.putExtra("ordered", "PEDIDO ${ordered["id"]}")
+                    intent.putExtra("ordered", "PEDIDO ${cart.id}")
+                    cart.products?.let { p -> ProductCartOrdered.on.addAll(p) }
                     startActivity(intent)
                 }
                 containerOrdered.addView(cardView)
@@ -96,11 +80,13 @@ class OrderedFragment : Fragment() {
             override fun onChildRemoved(p0: DataSnapshot) {
 
             }
-        })
+        }
+        ref.addChildEventListener(listener)
     }
 
     private fun clearProductCartOrdered() {
         ProductCartOrdered.on.clear()
+        containerOrdered.removeAllViews()
     }
 
 }
