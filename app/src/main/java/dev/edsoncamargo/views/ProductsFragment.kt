@@ -14,6 +14,8 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.PicassoProvider
 import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Product
@@ -74,6 +76,9 @@ class ProductsFragment : Fragment() {
                         layoutInflater.inflate(R.layout.card_item, fragmentProductsContainer, false)
                     cardView.tvProductNameList.text = product.nomeProduto
                     cardView.tvProductPriceList.text = formatter.format(product.precProduto)
+                    Picasso.get()
+                        .load("https://oficinacordova.azurewebsites.net/android/rest/produto/image/${product.idProduto}")
+                        .into(cardView.imageProductList)
                     cardView.btnAddToCard.setOnClickListener {
                         if (Cart.on.isEmpty().not()) {
                             for ((i, p) in Cart.on.withIndex()) {

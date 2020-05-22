@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Product
 import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.activity_product_details.*
+import kotlinx.android.synthetic.main.card_item.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,6 +51,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                     tvSpecialPriceDetails.text =
                         "Oferta de desconto ${formatter.format(product.descontoPromocao)}"
                     tvProductPriceDetails.text = formatter.format(product.precProduto)
+                    Picasso.get()
+                        .load("https://oficinacordova.azurewebsites.net/android/rest/produto/image/${product.idProduto}")
+                        .into(productImageDetails)
                 }
                 loading!!.dismiss()
             }
