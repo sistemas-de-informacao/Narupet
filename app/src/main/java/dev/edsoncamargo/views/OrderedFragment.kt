@@ -1,35 +1,34 @@
 package dev.edsoncamargo.views
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.google.gson.Gson
-
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import dev.edsoncamargo.R
-import dev.edsoncamargo.models.*
-import kotlinx.android.synthetic.main.card_item.*
-import kotlinx.android.synthetic.main.card_item_cart.*
-import kotlinx.android.synthetic.main.card_item_cart.view.*
-import kotlinx.android.synthetic.main.card_item_cart.view.containerProductsOrdered
+import dev.edsoncamargo.models.OrderedEntity
+import dev.edsoncamargo.models.ProductCartOrdered
+import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item_ordered.view.*
-import kotlinx.android.synthetic.main.card_item_product_ordered.view.*
 import kotlinx.android.synthetic.main.fragment_ordered.*
-import java.io.Serializable
 import java.text.NumberFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 /**
  * A simple [Fragment] subclass.
  */
 class OrderedFragment : Fragment() {
+
+    var loading: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +40,8 @@ class OrderedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        loading = progress(activity!!, layoutInflater)
         getOrdered()
     }
 
@@ -62,19 +63,22 @@ class OrderedFragment : Fragment() {
             }
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
-                val cart = dataSnapshot.getValue(OrderedEntity::class.java)
-                val cardView =
-                    layoutInflater.inflate(R.layout.card_item_ordered, containerOrdered, false)
-                cardView.tvHashOrdered.text = "PEDIDO ${cart!!.id}"
-                cardView.tvDateOrdered.text = cart.date.toString()
-                cardView.tvTotalOrdered.text = "TOTAL ${formatter.format(cart.total)}"
-                cardView.setOnClickListener {
-                    val intent = Intent(activity, OrderedProductsActivity::class.java)
-                    intent.putExtra("ordered", "PEDIDO ${cart.id}")
-                    cart.products?.let { p -> ProductCartOrdered.on.addAll(p) }
-                    startActivity(intent)
+                val activity: Activity? = activity
+                if (activity != null) {
+                    val cart = dataSnapshot.getValue(OrderedEntity::class.java)
+                    val cardView =
+                        layoutInflater.inflate(R.layout.card_item_ordered, containerOrdered, false)
+                    cardView.tvHashOrdered.text = "PEDIDO ${cart!!.id}"
+                    cardView.tvDateOrdered.text = cart.date.toString()
+                    cardView.tvTotalOrdered.text = "TOTAL ${formatter.format(cart.total)}"
+                    cardView.setOnClickListener {
+                        val intent = Intent(activity, OrderedProductsActivity::class.java)
+                        intent.putExtra("ordered", "PEDIDO ${cart.id}")
+                        cart.products?.let { p -> ProductCartOrdered.on.addAll(p) }
+                        startActivity(intent)
+                    }
+                    containerOrdered.addView(cardView)
                 }
-                containerOrdered.addView(cardView)
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {
@@ -82,6 +86,7 @@ class OrderedFragment : Fragment() {
             }
         }
         ref.addChildEventListener(listener)
+        loading!!.dismiss()
     }
 
     private fun clearProductCartOrdered() {

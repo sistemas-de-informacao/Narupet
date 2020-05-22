@@ -1,10 +1,10 @@
 package dev.edsoncamargo.views
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +12,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-
 import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Product
@@ -23,10 +22,14 @@ import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.NumberFormat
 import java.util.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -47,9 +50,9 @@ class ProductsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loading = progress(activity!!, layoutInflater)
-        getProducts()
         handleButtonSearchFilter()
         onCreateSpinnerCategoriesValues()
+        getProducts()
     }
 
     private fun handleButtonSearchFilter() {
@@ -59,30 +62,57 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun updateUi(products: Set<Product>) {
-        val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
-        fragmentProductsContainer.removeAllViews()
-        for (product in products) {
-            val cardView =
-                layoutInflater.inflate(R.layout.card_item, fragmentProductsContainer, false)
-            cardView.tvProductNameList.text = product.nomeProduto
-            cardView.tvProductPriceList.text = formatter.format(product.precProduto)
-            cardView.btnAddToCard.setOnClickListener {
-                if (Cart.on.isEmpty().not()) {
-                    for ((i, p) in Cart.on.withIndex()) {
-                        if (p.id == product.idProduto) {
-                            p.qtd = p.qtd!!.plus(1)
-                            p.totalPrice =
-                                p.totalPrice!!.plus(p.totalPrice!! - p.specialPrice!!)
-                            Snackbar
-                                .make(
-                                    fragmentProductsContainer,
-                                    "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
-                                    Snackbar.LENGTH_LONG
-                                )
-                                .show()
-                            return@setOnClickListener
-                        } else if (i >= Cart.on.size - 1) {
+    private fun updateUi(products: List<Product>?) {
+        val activity: Activity? = activity
+        if (activity != null) {
+            fragmentProductsContainer.removeAllViews()
+            val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+            if (products != null) {
+                Log.e("INFO", products.toString())
+                for (product in products) {
+                    val cardView =
+                        layoutInflater.inflate(R.layout.card_item, fragmentProductsContainer, false)
+                    cardView.tvProductNameList.text = product.nomeProduto
+                    cardView.tvProductPriceList.text = formatter.format(product.precProduto)
+                    cardView.btnAddToCard.setOnClickListener {
+                        if (Cart.on.isEmpty().not()) {
+                            for ((i, p) in Cart.on.withIndex()) {
+                                if (p.id == product.idProduto) {
+                                    p.qtd = p.qtd!!.plus(1)
+                                    p.totalPrice =
+                                        p.totalPrice!!.plus(p.totalPrice!! - p.specialPrice!!)
+                                    Snackbar
+                                        .make(
+                                            fragmentProductsContainer,
+                                            "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
+                                            Snackbar.LENGTH_LONG
+                                        )
+                                        .show()
+                                    return@setOnClickListener
+                                } else if (i >= Cart.on.size - 1) {
+                                    val productAdded = ProductCart(
+                                        product.nomeProduto,
+                                        product.idProduto,
+                                        null,
+                                        product.precProduto,
+                                        null,
+                                        product.descontoPromocao
+                                    )
+                                    productAdded.qtd = 1
+                                    productAdded.totalPrice =
+                                        product.precProduto - product.descontoPromocao
+                                    Cart.on.add(productAdded)
+                                    Snackbar
+                                        .make(
+                                            fragmentProductsContainer,
+                                            "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                            Snackbar.LENGTH_LONG
+                                        )
+                                        .show()
+                                    return@setOnClickListener
+                                }
+                            }
+                        } else {
                             val productAdded = ProductCart(
                                 product.nomeProduto,
                                 product.idProduto,
@@ -97,48 +127,28 @@ class ProductsFragment : Fragment() {
                             Snackbar
                                 .make(
                                     fragmentProductsContainer,
-                                    "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                    "${product.nomeProduto} adicionado ao carrinho.",
                                     Snackbar.LENGTH_LONG
                                 )
                                 .show()
                             return@setOnClickListener
                         }
                     }
-                } else {
-                    val productAdded = ProductCart(
-                        product.nomeProduto,
-                        product.idProduto,
-                        null,
-                        product.precProduto,
-                        null,
-                        product.descontoPromocao
-                    )
-                    productAdded.qtd = 1
-                    productAdded.totalPrice = product.precProduto - product.descontoPromocao
-                    Cart.on.add(productAdded)
-                    Snackbar
-                        .make(
-                            fragmentProductsContainer,
-                            "${product.nomeProduto} adicionado ao carrinho.",
-                            Snackbar.LENGTH_LONG
-                        )
-                        .show()
-                    return@setOnClickListener
+                    cardView.btnSeeProduct.setOnClickListener {
+                        val i = Intent(activity, ProductDetailsActivity::class.java)
+                        i.putExtra("id", product.idProduto)
+                        startActivity(i)
+                    }
+                    fragmentProductsContainer.addView(cardView)
                 }
             }
-            cardView.btnSeeProduct.setOnClickListener {
-                val i = Intent(activity, ProductDetailsActivity::class.java)
-                i.putExtra("id", product.idProduto)
-                startActivity(i)
-            }
-            fragmentProductsContainer.addView(cardView)
         }
     }
 
     private fun getProducts() {
         val request = changeRequestType()
-        val callback = object : Callback<Set<Product>> {
-            override fun onResponse(call: Call<Set<Product>>, response: Response<Set<Product>>) {
+        val callback = object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body()
                     if (products != null) {
@@ -164,7 +174,7 @@ class ProductsFragment : Fragment() {
                 loading!!.dismiss()
             }
 
-            override fun onFailure(call: Call<Set<Product>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 Snackbar
                     .make(
                         fragmentProductsContainer,
@@ -179,21 +189,27 @@ class ProductsFragment : Fragment() {
         request!!.enqueue(callback)
     }
 
-    private fun changeRequestType(): Call<Set<Product>>? {
-        if (etSearchProductName.text.isNullOrBlank()
-                .not() && category == -1
-        ) {
-            return createGenericRetrofit().listByName(etSearchProductName.text.toString().trim())
-        } else if (etSearchProductName.text.isNullOrBlank() && category != -1) {
-            return createGenericRetrofit().listByCategory(category)
-        } else if (etSearchProductName.text.isNullOrBlank()
-                .not() && category != -1
-        ) {
-            return createGenericRetrofit().listByNameAndCategory(
-                etSearchProductName.text.toString().trim(), category
-            )
+    private fun changeRequestType(): Call<List<Product>>? {
+        if (etSearchProductName.text.isNullOrBlank() && category == -1) {
+            return createGenericRetrofit().list()
+        } else {
+            if (etSearchProductName.text.isNullOrBlank()
+                    .not() && category == -1
+            ) {
+                return createGenericRetrofit().listByName(
+                    etSearchProductName.text.toString().trim()
+                )
+            } else if (etSearchProductName.text.isNullOrBlank() && category != -1) {
+                return createGenericRetrofit().listByCategory(category)
+            } else if (etSearchProductName.text.isNullOrBlank()
+                    .not() && category != -1
+            ) {
+                return createGenericRetrofit().listByNameAndCategory(
+                    etSearchProductName.text.toString().trim(), category
+                )
+            }
         }
-        return createGenericRetrofit().list()
+        return null
     }
 
     private fun createGenericRetrofit(): ProductRepository {

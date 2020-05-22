@@ -19,6 +19,7 @@ import dev.edsoncamargo.models.Ordered
 import dev.edsoncamargo.utils.alert
 import kotlinx.android.synthetic.main.card_item_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
+import kotlinx.android.synthetic.main.fragment_products.*
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -97,8 +98,13 @@ class CartFragment : Fragment() {
             btnFinishShop.setText("FINALIZAR POR ${formatter.format(total)}")
             btnFinishShop.setOnClickListener {
                 val database =
-                    FirebaseDatabase.getInstance().reference.child("ordered").child(FirebaseAuth.getInstance().currentUser!!.uid)
-                val ordered = Ordered(date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), total = total, products = Cart.on)
+                    FirebaseDatabase.getInstance().reference.child("ordered")
+                        .child(FirebaseAuth.getInstance().currentUser!!.uid)
+                val ordered = Ordered(
+                    date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    total = total,
+                    products = Cart.on
+                )
                 layoutInflater.inflate(R.layout.bag, shopContainer, true)
                 val new = database.push()
                 ordered.id = new.key

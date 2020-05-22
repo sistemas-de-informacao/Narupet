@@ -40,16 +40,19 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.productsContainer, productsFragment)
                 .commit()
+            supportActionBar?.title = "CARRINHO"
         } else if (intent.getStringExtra("intent") == "ordered") {
             val productsFragment = OrderedFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.productsContainer, productsFragment)
                 .commit()
+            supportActionBar?.title = "PEDIDOS"
         } else {
             val productsFragment = ProductsFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.productsContainer, productsFragment)
                 .commit()
+            supportActionBar?.title = "PRODUTOS"
         }
     }
 

@@ -30,7 +30,7 @@ class SendEmailActivity : AppCompatActivity() {
             i.type = "message/rfc822"
             i.putExtra(
                 Intent.EXTRA_EMAIL,
-                arrayOf("dinhocmenezes@hotmail.com", "DaniielVieira@outlook.com")
+                arrayOf("DaniielVieira@outlook.com", "dinhocmenezes@hotmail.com", "lucasmpelinzon@gmail.com", "matheusfracaroli@hotmail.com")
             )
             i.putExtra(Intent.EXTRA_SUBJECT, etSubjectEmail.text.trim())
             i.putExtra(Intent.EXTRA_TEXT, etMessage.text.trim())
