@@ -72,20 +72,20 @@ class OrderedFragment : Fragment() {
                 cardView.tvHashOrdered.text = "PEDIDO ${ordered["id"]}"
                 cardView.tvDateOrdered.text = ordered.get("date").toString()
                 cardView.tvTotalOrdered.text = "TOTAL ${formatter.format(ordered["total"])}"
-                for (p in ordered["products"] as List<*>) {
-                    val product = p as HashMap<*, *>
-                    ProductCartOrdered.on.add(
-                        ProductCart(
-                            product["name"].toString(),
-                            product["id"].toString().toInt(),
-                            product["qtd"].toString().toInt(),
-                            product["unitPrice"].toString().toDouble(),
-                            product["totalPrice"].toString().toDouble(),
-                            product["specialPrice"].toString().toDouble()
-                        )
-                    )
-                }
                 containerOrdered.setOnClickListener {
+                    for (p in ordered["products"] as List<*>) {
+                        val product = p as HashMap<*, *>
+                        ProductCartOrdered.on.add(
+                            ProductCart(
+                                product["name"].toString(),
+                                product["id"].toString().toInt(),
+                                product["qtd"].toString().toInt(),
+                                product["unitPrice"].toString().toDouble(),
+                                product["totalPrice"].toString().toDouble(),
+                                product["specialPrice"].toString().toDouble()
+                            )
+                        )
+                    }
                     val intent = Intent(activity, OrderedProductsActivity::class.java)
                     intent.putExtra("ordered", "PEDIDO ${ordered["id"]}")
                     startActivity(intent)
