@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.ProfileFragment">
+
+    <LinearLayout
+        android:id="@+id/containerProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="25sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12sp"
+            android:text="E-mail"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12sp"
+            android:ems="10"
+            android:hint="Nome"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12sp"
+            android:ems="10"
+            android:hint="Apelido"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etCPF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12sp"
+            android:ems="10"
+            android:hint="CPF"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12sp"
+            android:ems="10"
+            android:hint="Número de telefone"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnEditUserProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF7A42"
+            android:text="EDITAR"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</FrameLayout>

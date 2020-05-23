@@ -89,7 +89,7 @@ class ProductsFragment : Fragment() {
                                     Snackbar
                                         .make(
                                             fragmentProductsContainer,
-                                            "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
+                                            "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
                                             Snackbar.LENGTH_LONG
                                         )
                                         .show()
@@ -110,7 +110,7 @@ class ProductsFragment : Fragment() {
                                     Snackbar
                                         .make(
                                             fragmentProductsContainer,
-                                            "${product.nomeProduto} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                            "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
                                             Snackbar.LENGTH_LONG
                                         )
                                         .show()
@@ -132,7 +132,7 @@ class ProductsFragment : Fragment() {
                             Snackbar
                                 .make(
                                     fragmentProductsContainer,
-                                    "${product.nomeProduto} adicionado ao carrinho.",
+                                    "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho.",
                                     Snackbar.LENGTH_LONG
                                 )
                                 .show()

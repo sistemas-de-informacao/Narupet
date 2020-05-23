@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.FirebaseDatabase
 import dev.edsoncamargo.R
+import dev.edsoncamargo.models.User
 import dev.edsoncamargo.navigation.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_profille.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -57,8 +59,19 @@ class LoginActivity : AppCompatActivity() {
                     user.updateProfile(profileUpdates)
                         .addOnCompleteListener {
                             if (task.isSuccessful) {
+                                val ref = FirebaseDatabase.getInstance().reference.child("users")
+                                    .child(user.uid)
+                                ref.setValue(
+                                    User(
+                                        uid = user.uid,
+                                        name = "",
+                                        displayName = user.email!!.split("@")[0],
+                                        email = etEmailLogin.text.toString(),
+                                        cpf = "",
+                                        phoneNumber = ""
+                                    )
+                                )
                                 val i = Intent(this, MainActivity::class.java)
-
                                 startActivity(i)
                             }
                         }

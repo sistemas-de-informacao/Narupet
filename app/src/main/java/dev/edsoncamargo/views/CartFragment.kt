@@ -1,5 +1,7 @@
 package dev.edsoncamargo.views
 
+import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -9,7 +11,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -73,6 +77,7 @@ class CartFragment : Fragment() {
                                 product.qtd?.times((product.unitPrice!!.minus(product.specialPrice!!)))
                             getMyProductsToBuy()
                             handleButtonFinishShop()
+                            hideSoftKeyboard(activity!!)
                             Log.e("INFO", product.toString())
                         }
                     }
@@ -132,5 +137,14 @@ class CartFragment : Fragment() {
     private fun callContainerBag() {
         shopContainer.removeAllViews()
         layoutInflater.inflate(R.layout.bag, shopContainer, true)
+    }
+
+    fun hideSoftKeyboard(mActivity: Activity) {
+        // Check if no view has focus:
+        val view = mActivity.currentFocus
+        if (view != null) {
+            val inputManager = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 }

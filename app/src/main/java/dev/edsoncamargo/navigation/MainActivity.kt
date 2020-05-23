@@ -1,22 +1,15 @@
 package dev.edsoncamargo.navigation
 
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import dev.edsoncamargo.R
-import dev.edsoncamargo.views.CartFragment
-import dev.edsoncamargo.views.LoginActivity
-import dev.edsoncamargo.views.OrderedFragment
-import dev.edsoncamargo.views.ProductsFragment
+import dev.edsoncamargo.views.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.menu.*
 
 class MainActivity : AppCompatActivity() {
     private var toggle: ActionBarDrawerToggle? = null;
@@ -47,6 +40,12 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.productsContainer, productsFragment)
                 .commit()
             supportActionBar?.title = "PEDIDOS"
+        } else if (intent.getStringExtra("intent") == "profile") {
+            val productsFragment = ProfileFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.productsContainer, productsFragment)
+                .commit()
+            supportActionBar?.title = "PERFIL"
         } else {
             val productsFragment = ProductsFragment()
             supportFragmentManager.beginTransaction()
@@ -84,6 +83,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.ordered -> {
                     val i = Intent(this, MainActivity::class.java)
                     i.putExtra("intent", "ordered")
+                    startActivity(i)
+                }
+
+                R.id.profile -> {
+                    val i = Intent(this, MainActivity::class.java)
+                    i.putExtra("intent", "profile")
                     startActivity(i)
                 }
 
