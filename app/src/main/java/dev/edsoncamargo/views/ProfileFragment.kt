@@ -109,7 +109,7 @@ class ProfileFragment : Fragment() {
                     User(
                         user.uid,
                         if (etName.text.toString().isBlank().not()) etName.text.toString() else "",
-                        etDisplayName.text.toString().,
+                        etDisplayName.text.toString(),
                         tvEmail.text.toString(),
                         if (etCPF.text.toString().isBlank().not()) etCPF.text.toString() else "",
                         if (etPhoneNumber.text.toString().isBlank()

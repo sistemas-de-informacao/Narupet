@@ -20,6 +20,7 @@ import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Product
 import dev.edsoncamargo.models.ProductCart
+import dev.edsoncamargo.navigation.MainActivity
 import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item.view.*
@@ -53,8 +54,10 @@ class ProductsFragment : Fragment() {
         super.onResume()
         loading = progress(activity!!, layoutInflater)
         handleButtonSearchFilter()
+        handleFabCartCount()
         onCreateSpinnerCategoriesValues()
         getProducts()
+        updateCartCount()
     }
 
     private fun handleButtonSearchFilter() {
@@ -89,10 +92,14 @@ class ProductsFragment : Fragment() {
                                     Snackbar
                                         .make(
                                             fragmentProductsContainer,
-                                            "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
-                                            Snackbar.LENGTH_LONG
+                                            "${product.nomeProduto.substring(
+                                                0,
+                                                8
+                                            )} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
+                                            Snackbar.LENGTH_SHORT
                                         )
                                         .show()
+                                    updateCartCount()
                                     return@setOnClickListener
                                 } else if (i >= Cart.on.size - 1) {
                                     val productAdded = ProductCart(
@@ -110,10 +117,14 @@ class ProductsFragment : Fragment() {
                                     Snackbar
                                         .make(
                                             fragmentProductsContainer,
-                                            "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
-                                            Snackbar.LENGTH_LONG
+                                            "${product.nomeProduto.substring(
+                                                0,
+                                                8
+                                            )} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                            Snackbar.LENGTH_SHORT
                                         )
                                         .show()
+                                    updateCartCount()
                                     return@setOnClickListener
                                 }
                             }
@@ -132,10 +143,14 @@ class ProductsFragment : Fragment() {
                             Snackbar
                                 .make(
                                     fragmentProductsContainer,
-                                    "${product.nomeProduto.substring(0, 8)} adicionado ao carrinho.",
-                                    Snackbar.LENGTH_LONG
+                                    "${product.nomeProduto.substring(
+                                        0,
+                                        8
+                                    )} adicionado ao carrinho.",
+                                    Snackbar.LENGTH_SHORT
                                 )
                                 .show()
+                            updateCartCount()
                             return@setOnClickListener
                         }
                     }
@@ -278,6 +293,28 @@ class ProductsFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun updateCartCount() {
+        var qtd = 0
+        if (Cart.on.isEmpty().not()) {
+            for (ordered in Cart.on) {
+                qtd += ordered.qtd!!
+            }
+            if (qtd.toString().length < 10) {
+                fabCounter.text = "0${qtd}"
+            } else {
+                fabCounter.text = qtd.toString()
+            }
+        }
+    }
+
+    private fun handleFabCartCount() {
+        fabCart.setOnClickListener {
+            val i = Intent(activity, MainActivity::class.java)
+            i.putExtra("intent", "cart")
+            startActivity(i)
         }
     }
 

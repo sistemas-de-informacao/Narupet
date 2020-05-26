@@ -72,7 +72,13 @@ class CartFragment : Fragment() {
                     @RequiresApi(Build.VERSION_CODES.O)
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         if (cardView.etQtdProductCart.text.isNullOrBlank().not()) {
-                            product.qtd = cardView.etQtdProductCart.text.toString().toInt()
+                            var newQtd = 0
+                            newQtd = if (cardView.etQtdProductCart.text.toString().toInt() == 0) {
+                                1
+                            } else {
+                                cardView.etQtdProductCart.text.toString().toInt()
+                            }
+                            product.qtd = newQtd
                             product.totalPrice =
                                 product.qtd?.times((product.unitPrice!!.minus(product.specialPrice!!)))
                             getMyProductsToBuy()
@@ -143,7 +149,8 @@ class CartFragment : Fragment() {
         // Check if no view has focus:
         val view = mActivity.currentFocus
         if (view != null) {
-            val inputManager = mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputManager =
+                mActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
