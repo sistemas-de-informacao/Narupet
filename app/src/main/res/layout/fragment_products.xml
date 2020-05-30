@@ -81,7 +81,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12sp"
                     android:layout_marginRight="12sp"
-                    android:layout_marginBottom="12sp" />
+                    android:layout_marginBottom="12sp"
+                    android:spinnerMode="dialog"
+                    />
 
                 <Button
                     android:id="@+id/btnSearchFilter"

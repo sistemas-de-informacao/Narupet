@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="dev.edsoncamargo">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,12 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.OrderedProductsActivity"></activity>
+        <activity
+            android:name=".views.OrderedProductsActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.ProductDetailsActivity"
-            android:parentActivityName=".navigation.MainActivity" />
+            android:parentActivityName=".navigation.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.SplashScreenActivity"
+            android:screenOrientation="fullSensor"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,15 +33,23 @@
         </activity>
         <activity
             android:name=".navigation.AboutActivity"
-            android:parentActivityName=".navigation.MainActivity" />
+            android:parentActivityName=".navigation.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.LoginActivity"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.SendEmailActivity"
             android:parentActivityName=".navigation.AboutActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".navigation.MainActivity" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".navigation.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>
