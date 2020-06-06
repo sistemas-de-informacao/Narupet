@@ -25,6 +25,7 @@ import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +33,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.NumberFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -233,9 +235,14 @@ class ProductsFragment : Fragment() {
     }
 
     private fun createGenericRetrofit(): ProductRepository {
+        val client = OkHttpClient.Builder()
+            .readTimeout(45, TimeUnit.SECONDS)
+            .connectTimeout(45, TimeUnit.SECONDS)
+            .build()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://oficinacordova.azurewebsites.net")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
         return retrofit.create(ProductRepository::class.java)
     }
