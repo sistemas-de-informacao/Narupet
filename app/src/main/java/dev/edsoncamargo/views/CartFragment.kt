@@ -21,6 +21,7 @@ import dev.edsoncamargo.R
 import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Ordered
 import dev.edsoncamargo.utils.alert
+import kotlinx.android.synthetic.main.bag.view.*
 import kotlinx.android.synthetic.main.card_item_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.*
 import kotlinx.android.synthetic.main.fragment_products.*
@@ -94,7 +95,7 @@ class CartFragment : Fragment() {
                 cartContainer.addView(cardView)
             }
         } else {
-            callContainerBag()
+            callContainerBag(false)
         }
     }
 
@@ -121,7 +122,7 @@ class CartFragment : Fragment() {
                 ordered.id = new.key
                 new.setValue(ordered)
                 cartContainer.removeAllViews()
-                callContainerBag()
+                callContainerBag(true)
                 Cart.on.clear()
                 alert("Compra efetuada", "Obrigado por comprar conosco.", shopContainer.context)
             }
@@ -140,9 +141,13 @@ class CartFragment : Fragment() {
         }
     }
 
-    private fun callContainerBag() {
+    private fun callContainerBag(isPurchased: Boolean) {
         shopContainer.removeAllViews()
-        layoutInflater.inflate(R.layout.bag, shopContainer, true)
+        val bag = layoutInflater.inflate(R.layout.bag, shopContainer, false)
+        if (isPurchased) {
+            bag.tvBagMessage.text = "Compra efetuada com sucesso, volte para produtos e compre mais."
+        }
+        shopContainer.addView(bag)
     }
 
     fun hideSoftKeyboard(mActivity: Activity) {

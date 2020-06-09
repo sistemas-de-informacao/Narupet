@@ -40,7 +40,6 @@ class OrderedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         loading = progress(activity!!, layoutInflater)
         getOrdered()
     }

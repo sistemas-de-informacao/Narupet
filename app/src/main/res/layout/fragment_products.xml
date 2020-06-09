@@ -93,7 +93,7 @@
                     android:layout_marginRight="12sp"
                     android:layout_marginBottom="12sp"
                     android:backgroundTint="#FFFFFF"
-                    android:text="FILTRAR" />
+                    android:text="PESQUISAR" />
             </LinearLayout>
 
             <LinearLayout

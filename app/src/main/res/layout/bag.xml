@@ -17,6 +17,7 @@
         app:srcCompat="@drawable/sacola" />
 
     <TextView
+        android:id="@+id/tvBagMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sua sacola está vazia... \nVá para a página produtos e procure por itens que vão deixar seu pet feliz.\nQuando encontrá-los, clique em adicionar na sacola.\nDattebayo!"

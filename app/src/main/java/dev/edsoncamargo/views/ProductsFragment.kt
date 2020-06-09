@@ -25,6 +25,7 @@ import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.card_item.view.*
 import kotlinx.android.synthetic.main.fragment_products.*
+import kotlinx.android.synthetic.main.fragment_products.view.*
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,23 +50,84 @@ class ProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_products, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
+        val v = inflater.inflate(R.layout.fragment_products, container, false)
         loading = progress(activity!!, layoutInflater)
-        handleButtonSearchFilter()
-        handleFabCartCount()
-        onCreateSpinnerCategoriesValues()
-        getProducts()
+        handleButtonSearchFilter(v)
+        handleFabCartCount(v)
+        onCreateSpinnerCategoriesValues(v)
+        getProducts(v)
         updateCartCount()
+        return v
     }
 
-    private fun handleButtonSearchFilter() {
-        btnSearchFilter.setOnClickListener {
+    private fun handleButtonSearchFilter(view: View) {
+        view.btnSearchFilter.setOnClickListener {
             loading = progress(activity!!, layoutInflater)
-            getProducts()
+            getProducts(view)
+        }
+    }
+
+    private fun handleFabCartCount(view: View) {
+        view.fabCart.setOnClickListener {
+            val i = Intent(activity, MainActivity::class.java)
+            i.putExtra("intent", "cart")
+            startActivity(i)
+        }
+    }
+
+    private fun onCreateSpinnerCategoriesValues(view: View) {
+        val spinner = view.findViewById<Spinner>(R.id.spSearchCategories)
+        val items = arrayOf(
+            "Selecione uma categoria",
+            "Alimentação",
+            "Espécies",
+            "Farmácia",
+            "Adestramento",
+            "Higiene e Beleza",
+            "Acessórios",
+            "Pesticidas",
+            "Outro Tésteé"
+        )
+        val adapter = ArrayAdapter(activity!!, android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                when (spinner.selectedItemPosition) {
+                    0 -> {
+                        category = -1
+                    }
+                    1 -> {
+                        category = 1
+                    }
+                    2 -> {
+                        category = 2
+                    }
+                    3 -> {
+                        category = 3
+                    }
+                    4 -> {
+                        category = 4
+                    }
+                    5 -> {
+                        category = 5
+                    }
+                    6 -> {
+                        category = 6
+                    }
+                    7 -> {
+                        category = 7
+                    }
+                    8 -> {
+                        category = 20
+                    }
+                }
+            }
         }
     }
 
@@ -167,8 +229,8 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun getProducts() {
-        val request = changeRequestType()
+    private fun getProducts(view: View) {
+        val request = changeRequestType(view)
         val callback = object : Callback<List<Product>> {
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
@@ -211,23 +273,23 @@ class ProductsFragment : Fragment() {
         request!!.enqueue(callback)
     }
 
-    private fun changeRequestType(): Call<List<Product>>? {
-        if (etSearchProductName.text.isNullOrBlank() && category == -1) {
+    private fun changeRequestType(view: View): Call<List<Product>>? {
+        if (view.etSearchProductName.text.isNullOrBlank() && category == -1) {
             return createGenericRetrofit().list()
         } else {
-            if (etSearchProductName.text.isNullOrBlank()
+            if (view.etSearchProductName.text.isNullOrBlank()
                     .not() && category == -1
             ) {
                 return createGenericRetrofit().listByName(
-                    etSearchProductName.text.toString().trim()
+                    view.etSearchProductName.text.toString().trim()
                 )
-            } else if (etSearchProductName.text.isNullOrBlank() && category != -1) {
+            } else if (view.etSearchProductName.text.isNullOrBlank() && category != -1) {
                 return createGenericRetrofit().listByCategory(category)
-            } else if (etSearchProductName.text.isNullOrBlank()
+            } else if (view.etSearchProductName.text.isNullOrBlank()
                     .not() && category != -1
             ) {
                 return createGenericRetrofit().listByNameAndCategory(
-                    etSearchProductName.text.toString().trim(), category
+                    view.etSearchProductName.text.toString().trim(), category
                 )
             }
         }
@@ -247,62 +309,6 @@ class ProductsFragment : Fragment() {
         return retrofit.create(ProductRepository::class.java)
     }
 
-    private fun onCreateSpinnerCategoriesValues() {
-        val spinner = activity!!.findViewById<Spinner>(R.id.spSearchCategories)
-        val items = arrayOf(
-            "Seleciona uma categoria",
-            "Alimentação",
-            "Espécies",
-            "Farmácia",
-            "Adestramento",
-            "Higiene e Beleza",
-            "Acessórios",
-            "Pesticidas",
-            "Outro Tésteé"
-        )
-        val adapter = ArrayAdapter(activity!!, android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                when (spinner.selectedItemPosition) {
-                    0 -> {
-                        category = -1
-                    }
-                    1 -> {
-                        category = 1
-                    }
-                    2 -> {
-                        category = 2
-                    }
-                    3 -> {
-                        category = 3
-                    }
-                    4 -> {
-                        category = 4
-                    }
-                    5 -> {
-                        category = 5
-                    }
-                    6 -> {
-                        category = 6
-                    }
-                    7 -> {
-                        category = 7
-                    }
-                    8 -> {
-                        category = 20
-                    }
-                }
-            }
-        }
-    }
-
     private fun updateCartCount() {
         var qtd = 0
         if (Cart.on.isEmpty().not()) {
@@ -314,14 +320,6 @@ class ProductsFragment : Fragment() {
             } else {
                 fabCounter.text = qtd.toString()
             }
-        }
-    }
-
-    private fun handleFabCartCount() {
-        fabCart.setOnClickListener {
-            val i = Intent(activity, MainActivity::class.java)
-            i.putExtra("intent", "cart")
-            startActivity(i)
         }
     }
 
