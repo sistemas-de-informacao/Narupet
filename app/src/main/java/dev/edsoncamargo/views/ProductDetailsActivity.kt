@@ -7,7 +7,9 @@ import android.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import dev.edsoncamargo.R
+import dev.edsoncamargo.models.Cart
 import dev.edsoncamargo.models.Product
+import dev.edsoncamargo.models.ProductCart
 import dev.edsoncamargo.repository.ProductRepository
 import dev.edsoncamargo.utils.progress
 import kotlinx.android.synthetic.main.activity_product_details.*
@@ -51,13 +53,81 @@ class ProductDetailsActivity : AppCompatActivity() {
                     tvSpecialPriceDetails.text =
                         "Oferta de desconto ${formatter.format(product.descontoPromocao)}"
                     tvProductPriceDetails.text = formatter.format(product.precProduto)
+                    btnAddProductDetailsToCart.setOnClickListener {
+                        if (Cart.on.isEmpty().not()) {
+                            for ((i, p) in Cart.on.withIndex()) {
+                                if (p.id == product.idProduto) {
+                                    p.qtd = p.qtd!!.plus(1)
+                                    p.totalPrice =
+                                        p.totalPrice!!.plus(p.totalPrice!! - p.specialPrice!!)
+                                    Snackbar
+                                        .make(
+                                            containerProductDetails,
+                                            "${product.nomeProduto.substring(
+                                                0,
+                                                8
+                                            )} adicionado ao carrinho. \nQuantidade: ${p.qtd}",
+                                            Snackbar.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    return@setOnClickListener
+                                } else if (i >= Cart.on.size - 1) {
+                                    val productAdded = ProductCart(
+                                        product.nomeProduto,
+                                        product.idProduto,
+                                        null,
+                                        product.precProduto,
+                                        null,
+                                        product.descontoPromocao
+                                    )
+                                    productAdded.qtd = 1
+                                    productAdded.totalPrice =
+                                        product.precProduto - product.descontoPromocao
+                                    Cart.on.add(productAdded)
+                                    Snackbar
+                                        .make(
+                                            containerProductDetails,
+                                            "${product.nomeProduto.substring(
+                                                0,
+                                                8
+                                            )} adicionado ao carrinho. \nQuantidade: ${productAdded.qtd}",
+                                            Snackbar.LENGTH_SHORT
+                                        )
+                                        .show()
+                                    return@setOnClickListener
+                                }
+                            }
+                        } else {
+                            val productAdded = ProductCart(
+                                product.nomeProduto,
+                                product.idProduto,
+                                null,
+                                product.precProduto,
+                                null,
+                                product.descontoPromocao
+                            )
+                            productAdded.qtd = 1
+                            productAdded.totalPrice = product.precProduto - product.descontoPromocao
+                            Cart.on.add(productAdded)
+                            Snackbar
+                                .make(
+                                    containerProductDetails,
+                                    "${product.nomeProduto.substring(
+                                        0,
+                                        8
+                                    )} adicionado ao carrinho.",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                                .show()
+                            return@setOnClickListener
+                        }
+                    }
                     Picasso.get()
                         .load("https://oficinacordova.azurewebsites.net/android/rest/produto/image/${product.idProduto}")
                         .into(productImageDetails)
                 }
                 loading!!.dismiss()
             }
-
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
                 Snackbar

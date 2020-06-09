@@ -56,8 +56,12 @@ class ProductsFragment : Fragment() {
         handleFabCartCount(v)
         onCreateSpinnerCategoriesValues(v)
         getProducts(v)
-        updateCartCount()
         return v
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateCartCount()
     }
 
     private fun handleButtonSearchFilter(view: View) {
